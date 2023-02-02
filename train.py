@@ -1,10 +1,7 @@
 '''Train CIFAR10 with PyTorch.'''
 from __future__ import print_function
 
-import torch
-import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 
 import torchvision
@@ -15,7 +12,6 @@ import argparse
 
 from models import *
 from utils import progress_bar
-from torch.autograd import Variable
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
@@ -92,7 +88,6 @@ def train(epoch):
         if use_cuda:
             inputs, targets = inputs.cuda(), targets.cuda()
         optimizer.zero_grad()
-        inputs, targets = Variable(inputs), Variable(targets)
         outputs = net(inputs)
         loss = criterion(outputs, targets)
         loss.backward()
@@ -117,7 +112,7 @@ def test(epoch):
         for batch_idx, (inputs, targets) in enumerate(testloader):
             if use_cuda:
                 inputs, targets = inputs.cuda(), targets.cuda()
-            inputs, targets = Variable(inputs), Variable(targets)
+
             outputs = net(inputs)
             loss = criterion(outputs, targets)
 
