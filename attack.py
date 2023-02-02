@@ -1,23 +1,16 @@
 import os
-import sys
 import numpy as np
 
 import argparse
 
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 
 import torchvision
 import torchvision.transforms as transforms
 from models import *
-from utils import progress_bar
-# from torch.autograd import Variable
 
-from differential_evolution import differential_evolution
-# from scipy.optimize import differential_evolution
+# from differential_evolution import differential_evolution
+from scipy.optimize import differential_evolution
 
 parser = argparse.ArgumentParser(description='One pixel attack with PyTorch')
 parser.add_argument('--model', default='vgg16', help='The target model')
@@ -56,7 +49,6 @@ def perturb_image(xs, img):
 def predict_classes(xs, img, target_calss, net, minimize=True):
     imgs_perturbed = perturb_image(xs, img.clone())
     with torch.no_grad():
-        # input = Variable(imgs_perturbed).cuda()
         input = imgs_perturbed.cuda()
         predictions = F.softmax(net(input), dim=1).data.cpu().numpy()[:, target_calss]
 
@@ -66,7 +58,6 @@ def predict_classes(xs, img, target_calss, net, minimize=True):
 def attack_success(x, img, target_calss, net, targeted_attack=False, verbose=False):
     attack_image = perturb_image(x, img.clone())
     with torch.no_grad():
-        # input = Variable(attack_image).cuda()
         input = attack_image.cuda()
         confidence = F.softmax(net(input), dim=1).data.cpu().numpy()[0]
         predicted_class = np.argmax(confidence)
@@ -107,7 +98,6 @@ def attack(img, label, net, target=None, pixels=1, maxiter=75, popsize=400, verb
                                            recombination=1, atol=-1, callback=callback_fn, polish=False, init=inits)
     with torch.no_grad():
         attack_image = perturb_image(attack_result.x, img)
-        # attack_var = Variable(attack_image).cuda()
         attack_var = attack_image.cuda()
         predicted_probs = F.softmax(net(attack_var), dim=1).data.cpu().numpy()[0]
 
@@ -124,7 +114,6 @@ def attack_all(net, loader, pixels=1, targeted=False, maxiter=75, popsize=400, v
     with torch.no_grad():
         for batch_idx, (input, target) in enumerate(loader):
 
-            # img_var = Variable(input).cuda()
             img_var = input.cuda()
             prior_probs = F.softmax(net(img_var), dim=1)
             _, indices = torch.max(prior_probs, 1)
