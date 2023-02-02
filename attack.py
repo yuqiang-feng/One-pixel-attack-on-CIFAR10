@@ -85,7 +85,7 @@ def attack(img, label, net, target=None, pixels=1, maxiter=75, popsize=400, verb
 
     bounds = [(0, 32), (0, 32), (0, 255), (0, 255), (0, 255)] * pixels
 
-    popmul = int(max(1, popsize / len(bounds)))
+    popmul = max(1, popsize // len(bounds))
 
     predict_fn = lambda xs: predict_classes(
         xs, img, target_calss, net, target is None)
@@ -164,7 +164,7 @@ def main():
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
     ])
     test_set = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=tranfrom_test)
-    testloader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=True, num_workers=0)
+    testloader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=True, num_workers=2)
 
     class_names = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
