@@ -160,10 +160,10 @@ def main():
     testloader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=True, num_workers=2)
 
     class_names = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-    assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
-    # assert os.path.isdir('/kaggle/working/One-pixel-attack-on-CIFAR10/checkpoint'), 'Error: no checkpoint directory found!'
-    checkpoint = torch.load('./checkpoint/%s.t7' % args.model)
-    # checkpoint = torch.load('/kaggle/working/One-pixel-attack-on-CIFAR10/checkpoint/%s.t7' % args.model)
+    # assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
+    assert os.path.isdir('/kaggle/working/One-pixel-attack-on-CIFAR10/checkpoint'), 'Error: no checkpoint directory found!'
+    # checkpoint = torch.load('./checkpoint/%s.t7' % args.model)
+    checkpoint = torch.load('/kaggle/working/One-pixel-attack-on-CIFAR10/checkpoint/%s.t7' % args.model)
     net = checkpoint['net']
     net.cuda()
     cudnn.benchmark = True
