@@ -14,7 +14,7 @@ from scipy.optimize import differential_evolution
 
 parser = argparse.ArgumentParser(description='One pixel attack with PyTorch')
 parser.add_argument('--model', default='vgg16', help='The target model')
-parser.add_argument('--pixels', default=3, type=int, help='The number of pixels that can be perturbed.')
+parser.add_argument('--pixels', default=1, type=int, help='The number of pixels that can be perturbed.')
 parser.add_argument('--maxiter', default=100, type=int, help='The maximum number of iteration in the DE algorithm.')
 parser.add_argument('--popsize', default=400, type=int, help='The number of adverisal examples in each iteration.')
 parser.add_argument('--samples', default=100, type=int, help='The number of image samples to attack.')
@@ -160,10 +160,10 @@ def main():
     testloader = torch.utils.data.DataLoader(test_set, batch_size=1, shuffle=True, num_workers=2)
 
     class_names = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-    # assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
-    assert os.path.isdir('/kaggle/working/One-pixel-attack-on-CIFAR10/checkpoint'), 'Error: no checkpoint directory found!'
-    # checkpoint = torch.load('./checkpoint/%s.t7' % args.model)
-    checkpoint = torch.load('/kaggle/working/One-pixel-attack-on-CIFAR10/checkpoint/%s.t7' % args.model)
+    assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
+    # assert os.path.isdir('/kaggle/working/One-pixel-attack-on-CIFAR10/checkpoint'), 'Error: no checkpoint directory found!'
+    checkpoint = torch.load('./checkpoint/%s.t7' % args.model)
+    # checkpoint = torch.load('/kaggle/working/One-pixel-attack-on-CIFAR10/checkpoint/%s.t7' % args.model)
     net = checkpoint['net']
     net.cuda()
     cudnn.benchmark = True
